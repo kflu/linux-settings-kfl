@@ -50,6 +50,7 @@ mkdir -p \
     {
         printf "\n"
         printf "set -g mouse on\n"
+	printf "set -g set-clipboard on\n"
         printf "set-option -g history-limit 500000\n"
     } >> "$HOME/.tmux.conf.local"
 
