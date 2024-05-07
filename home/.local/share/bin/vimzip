@@ -1,0 +1,6 @@
+#!/bin/sh
+
+vim +"$(cat <<VIMSCRIPT
+call zip#Browse('$1')
+VIMSCRIPT
+)"
