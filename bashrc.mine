@@ -9,35 +9,11 @@ test ! -t 0 && return
 # [1]: https://unix.stackexchange.com/a/4673/38968
 DIR=`dirname $BASH_SOURCE`
 
-# Customize prompt
-prompt_command() {
-    local light_green="\[\e[1;32m\]"
-    local light_red="\[\e[1;31m\]"
-    local yellow="\[\e[0;33m\]"
-    local gray="\[\e[0;37m\]"
-    local magenta="\[\e[0;95m\]"
-    local white="\[\e[38;5;15m\]"
-    local bg_blue="\e[48;5;18m\]"
-    local reset="\[\e[m\]"
-
-    local status="$?"
-    local status_color=""
-    if [ $status != 0 ]; then
-        status_color=$light_red
-    else
-        status_color=$light_green
-    fi
-    export PS1="${white}${bg_blue}[\u@\h \w] ${status_color}%${reset}\n${magenta}>>>${reset} "
-}
-export GIT_PS1_SHOWDIRTYSTATE=1
-export PROMPT_COMMAND=prompt_command
-
-
 source "$DIR/common.sh"
 source_rc ~/rc.d/bash/pre '*'
 source_rc ~/rc.d/sh/pre '*'
 source $DIR/rc.mine        # shell-neutral settings
-export PS1="[\u@\h \w]$ "
+export PS1='\n[ \H \W ] % ($?) \n>>> '
 source_rc ~/rc.d/bash/post '*'
 source_rc ~/rc.d/sh/post '*'
 

@@ -3,13 +3,29 @@
 source_rc() {
     dir="$1"
     pattern="$2"
-    find "$dir" -type f -o -type l -name "$pattern" | while read fn; do 
+    FILES="$( find "$dir" -type f -o -type l -name "$pattern" )"
+
+    while read fn; do 
+        KKK=111
         case $fn in
+            ("") ;;
             (*~) ;;
             (.*~) ;;
             (*) 
-                source $fn
+                . "$fn"
                 ;;
         esac
-    done
+    done <<EOF
+$FILES
+EOF
+
+###     find "$dir" -type f -o -type l -name "$pattern" | while read fn; do 
+###         case $fn in
+###             (*~) ;;
+###             (.*~) ;;
+###             (*) 
+###                 . "$fn"
+###                 ;;
+###         esac
+###     done
 }
