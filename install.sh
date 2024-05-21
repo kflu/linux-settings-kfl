@@ -98,7 +98,7 @@ run -b 'tmux bind-key m select-pane -m'
 # Use ASCII chars for pane separators. -q to noop for older tmux where it's not
 # supported
 set -gq pane-border-lines simple
-
+set -gq word-seperators ' []()'
 
 # }}} linux-settings-kfl
 EOF
