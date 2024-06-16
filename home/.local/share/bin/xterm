@@ -1,6 +1,11 @@
 #!/bin/sh
 
-/usr/bin/xterm                                   \
+case "$(uname -o)" in
+    Darwin) CMD=/opt/X11/bin/xterm;;
+    *)      CMD=/usr/bin/xterm;;
+esac
+
+"$CMD"                                           \
     -class "xterm_sh"                            \
     -xrm "xterm*termName: xterm-256color"        \
     -xrm "xterm*allowWindowOps: true"            \
