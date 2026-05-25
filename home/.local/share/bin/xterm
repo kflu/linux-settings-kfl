@@ -11,7 +11,7 @@ esac
     -xrm "xterm*allowWindowOps: true"            \
     -xrm "xterm*metaSendsEscape: true"           \
     $(: ---- FONTS ---- )                        \
-    -xrm "xterm*faceSize: 12"                    \
+    $(: -xrm "xterm*faceSize: 12" )              \
     -xrm "xterm*faceName: DejaVuSansMono,mono"   \
     -xrm "xterm*renderFont:   true"              \
     $(: needed for font adjustments )            \
