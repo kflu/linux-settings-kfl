@@ -1,0 +1,18 @@
+[user]
+	name = KFL
+	email = kludev@gmail.com
+
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+    smartlog = log --graph
+    sl = !git smartlog
+    dirdiff = difftool --ignore-submodules --dir-diff --no-symlinks --tool=vimdirdiff
+
+[credential]
+	helper = cache
+
+[difftool "vimdirdiff"]
+    cmd = vim -f '+next' '+execute \"DirDiff\" argv(0) argv(1)' $LOCAL $REMOTE

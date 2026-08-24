@@ -203,3 +203,34 @@ uppend_file_content ~/.profile "# == profile.mine ==" "source $DIR/profile.mine"
 uppend_file_content ~/.zprofile "# == profile.mine ==" "source $DIR/profile.mine"
 uppend_file_content ~/.zshrc "# == zshrc.mine ==" "source $DIR/zshrc.mine"
 uppend_file_content ~/.bashrc "# == bashrc.mine ==" "source $DIR/bashrc.mine"
+
+
+# =============================================================================
+# GIT CONFIG
+# =============================================================================
+#
+# ~/.gitconfig must stay a host-local real file. We'll use [include] instead.
+if [ -L ~/.gitconfig ]; then
+    gitconfig_target="$(readlink -m ~/.gitconfig 2>/dev/null || readlink ~/.gitconfig)"
+    case "$gitconfig_target" in
+        */linux-settings-kfl/*)
+            echo "Removing ~/.gitconfig symlink into $gitconfig_target"
+            rm -f ~/.gitconfig
+            ;;
+        *)
+            echo "WARNING: ~/.gitconfig is a symlink to $gitconfig_target." >&2
+            echo "         Writing through it. Remove it if git config should be host-local." >&2
+            ;;
+    esac
+fi
+
+# The trailing `#` comment is both a git comment (git stops parsing the value at
+# `#`) and this script's guard against appending the include twice.
+if ! grep -q "LINUX-SETTINGS-KFL-GITCONFIG-LOCAL" ~/.gitconfig 2>/dev/null; then
+    echo "Adding gitconfig.local include to ~/.gitconfig"
+    cat >> ~/.gitconfig <<EOF
+
+[include]
+    path = $DIR/gitconfig.local  # LINUX-SETTINGS-KFL-GITCONFIG-LOCAL
+EOF
+fi
