@@ -259,4 +259,37 @@ quit bye
 EOF
 }
 
+# {{{ tmux logical pwd
+# Publish the logical $PWD (symlinks unresolved) to the tmux pane, for the
+# split-window bindings in ~/.tmux.conf.local. tmux's #{pane_current_path} reads
+# /proc/<pid>/cwd, which the kernel has already resolved. @logical_pwd_real lets
+# those bindings detect a chdir made by something other than the shell (e.g. :cd
+# in vim) and fall back instead of splitting into a stale directory.
+_tmux_publish_logical_pwd() {
+    [ -n "$TMUX_PANE" ] || return 0
+    tmux set-option -p -q -t "$TMUX_PANE" @logical_pwd "$PWD" \; \
+         set-option -p -q -t "$TMUX_PANE" @logical_pwd_real "$(pwd -P)"
+}
+
+if [ -n "$TMUX" ] && [ -n "$TMUX_PANE" ]; then
+    if [ -n "$ZSH_VERSION" ]; then
+        autoload -Uz add-zsh-hook
+        add-zsh-hook precmd _tmux_publish_logical_pwd
+    elif [ -n "$BASH_VERSION" ]; then
+        case ";$PROMPT_COMMAND;" in
+            *";_tmux_publish_logical_pwd;"*) ;;
+            *) PROMPT_COMMAND="_tmux_publish_logical_pwd${PROMPT_COMMAND:+;$PROMPT_COMMAND}" ;;
+        esac
+    else
+        # No portable prompt hook, so ride PS1: it is re-expanded before every
+        # prompt, and the function prints nothing, so it stays invisible. Must
+        # stay single-quoted to defer the substitution to prompt time.
+        case "$PS1" in
+            *_tmux_publish_logical_pwd*) ;;
+            *) export PS1="$PS1"'$(_tmux_publish_logical_pwd)' ;;
+        esac
+    fi
+fi
+# }}}
+
 # vim: ft=sh fdm=marker

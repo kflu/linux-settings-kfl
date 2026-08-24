@@ -101,6 +101,19 @@ set -gq pane-border-lines simple
 set -gq word-seperators ' []()'
 
 # }}} linux-settings-kfl
+
+# {{{ logical pwd for splits
+# Prefer the logical $PWD recorded by the prompt hook in rc.mine over
+# #{pane_current_path}, which has symlinks resolved by the kernel. Only trust it
+# when its resolved form still matches the pane's real cwd, so a chdir by
+# something other than the shell (e.g. :cd in vim) falls back instead of
+# misfiring.
+# #!important survives Oh my tmux!'s binding rewriting (_apply_important).
+bind - split-window -v -c "#{?#{==:#{@logical_pwd_real},#{pane_current_path}},#{@logical_pwd},#{pane_current_path}}"  #!important
+bind _ split-window -h -c "#{?#{==:#{@logical_pwd_real},#{pane_current_path}},#{@logical_pwd},#{pane_current_path}}"  #!important
+bind '"' split-window -v -c "#{?#{==:#{@logical_pwd_real},#{pane_current_path}},#{@logical_pwd},#{pane_current_path}}"  #!important
+bind '%' split-window -h -c "#{?#{==:#{@logical_pwd_real},#{pane_current_path}},#{@logical_pwd},#{pane_current_path}}"  #!important
+# }}} logical pwd for splits
 EOF
 )
 
