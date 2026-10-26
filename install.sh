@@ -127,8 +127,12 @@ EOF
 (  # -- oh my zsh --
     echo "Installing ohmyzsh..."
 
+    # Keep ~/.zshrc as-is; oh-my-zsh is sourced from zshrc.mine instead. The
+    # installer writes its template when ~/.zshrc is missing, so ensure it exists.
+    touch "$HOME/.zshrc"
     CHSH=no \
     RUNZSH=no \
+    KEEP_ZSHRC=yes \
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ) || true
 
